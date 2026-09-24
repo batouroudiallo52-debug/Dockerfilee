@@ -4,7 +4,7 @@ FROM node:20-bookworm-slim
 # Modifier cette valeur après chaque mise à jour de OVL-MD-V2 : comme elle est
 # utilisée dans la commande RUN ci-dessous, Docker invalide le cache et Render
 # reconstruit l'image avec le nouveau commit.
-ARG OVL_COMMIT=a29770d
+ARG OVL_COMMIT=50e22de
 
 RUN apt-get update && apt-get install -y \
     ffmpeg \
@@ -32,6 +32,8 @@ RUN git clone --depth 1 --branch main --single-branch \
     && grep -q "technologie:" /ovl_bot/cmd/Quiz.js \
     && grep -q "CATEGORY_IMAGES" /ovl_bot/cmd/Quiz.js \
     && grep -q "hasImageOption" /ovl_bot/cmd/Quiz.js \
+    && grep -q "commons.wikimedia.org/w/api.php" /ovl_bot/cmd/Quiz.js \
+    && grep -q "imageSearchQuery" /ovl_bot/cmd/Quiz.js \
     && grep -q '"category": "anime"' /ovl_bot/lib/quiz_questions.json \
     && grep -q '"category": "culture"' /ovl_bot/lib/quiz_questions.json \
     && grep -q '"category": "foot"' /ovl_bot/lib/quiz_questions.json \
