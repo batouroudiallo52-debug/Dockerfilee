@@ -1,7 +1,9 @@
 FROM node:20-bookworm-slim
 
-# Version du bot à déployer. Mettre à jour cette valeur après chaque nouveau
-# push important dans OVL-MD-V2 afin d'invalider le cache Docker de Render.
+# Version exacte du bot à déployer.
+# Modifier cette valeur après chaque mise à jour de OVL-MD-V2 : comme elle est
+# utilisée dans la commande RUN ci-dessous, Docker invalide le cache et Render
+# reconstruit l'image avec le nouveau commit.
 ARG OVL_COMMIT=aacd32c
 
 RUN apt-get update && apt-get install -y \
@@ -14,7 +16,15 @@ RUN git clone --depth 1 --branch main --single-branch \
     && test "$(git -C /ovl_bot rev-parse --short HEAD)" = "$OVL_COMMIT" \
     && test -f /ovl_bot/cmd/Quiz.js \
     && grep -q "sciences" /ovl_bot/cmd/Quiz.js \
-    && grep -q '"category": "histoire"' /ovl_bot/lib/quiz_questions.json
+    && grep -q '"category": "histoire"' /ovl_bot/lib/quiz_questions.json \
+    && grep -q "geographie" /ovl_bot/cmd/Quiz.js \
+    && grep -q "technologie" /ovl_bot/cmd/Quiz.js \
+    && grep -q "litterature" /ovl_bot/cmd/Quiz.js \
+    && grep -q "nature" /ovl_bot/cmd/Quiz.js \
+    && grep -q '"category": "geographie"' /ovl_bot/lib/quiz_questions.json \
+    && grep -q '"category": "technologie"' /ovl_bot/lib/quiz_questions.json \
+    && grep -q '"category": "litterature"' /ovl_bot/lib/quiz_questions.json \
+    && grep -q '"category": "nature"' /ovl_bot/lib/quiz_questions.json
 
 ENV NODE_ENV=production
 WORKDIR /ovl_bot
