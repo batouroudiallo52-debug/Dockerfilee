@@ -5,12 +5,11 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-RUN git clone https://github.com/batouroudiallo52-debug/OVL-MD-V2.git /ovl_bot
+RUN git clone --depth 1 --branch main https://github.com/batouroudiallo52-debug/OVL-MD-V2.git /ovl_bot
 
+ENV NODE_ENV=production
 WORKDIR /ovl_bot
-
-RUN npm install
+RUN npm install --omit=dev
 
 EXPOSE 8000
-
-CMD ["npm", "start"]
+CMD ["npm", "run", "Ovl"]
