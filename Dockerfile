@@ -4,7 +4,7 @@ FROM node:20-bookworm-slim
 # Modifier cette valeur après chaque mise à jour de OVL-MD-V2 : comme elle est
 # utilisée dans la commande RUN ci-dessous, Docker invalide le cache et Render
 # reconstruit l'image avec le nouveau commit.
-ARG OVL_COMMIT=3f6d662
+ARG OVL_COMMIT=a29770d
 
 RUN apt-get update && apt-get install -y \
     ffmpeg \
@@ -23,6 +23,13 @@ RUN git clone --depth 1 --branch main --single-branch \
     && grep -q "horreur" /ovl_bot/cmd/Quiz.js \
     && grep -q "kpop" /ovl_bot/cmd/Quiz.js \
     && grep -q "musique" /ovl_bot/cmd/Quiz.js \
+    && grep -q "films:" /ovl_bot/cmd/Quiz.js \
+    && grep -q "geographie:" /ovl_bot/cmd/Quiz.js \
+    && grep -q "histoire:" /ovl_bot/cmd/Quiz.js \
+    && grep -q "litterature:" /ovl_bot/cmd/Quiz.js \
+    && grep -q "nature:" /ovl_bot/cmd/Quiz.js \
+    && grep -q "sciences:" /ovl_bot/cmd/Quiz.js \
+    && grep -q "technologie:" /ovl_bot/cmd/Quiz.js \
     && grep -q "CATEGORY_IMAGES" /ovl_bot/cmd/Quiz.js \
     && grep -q "hasImageOption" /ovl_bot/cmd/Quiz.js \
     && grep -q '"category": "anime"' /ovl_bot/lib/quiz_questions.json \
@@ -30,7 +37,14 @@ RUN git clone --depth 1 --branch main --single-branch \
     && grep -q '"category": "foot"' /ovl_bot/lib/quiz_questions.json \
     && grep -q '"category": "horreur"' /ovl_bot/lib/quiz_questions.json \
     && grep -q '"category": "kpop"' /ovl_bot/lib/quiz_questions.json \
-    && grep -q '"category": "musique"' /ovl_bot/lib/quiz_questions.json
+    && grep -q '"category": "musique"' /ovl_bot/lib/quiz_questions.json \
+    && grep -q '"category": "films"' /ovl_bot/lib/quiz_questions.json \
+    && grep -q '"category": "geographie"' /ovl_bot/lib/quiz_questions.json \
+    && grep -q '"category": "histoire"' /ovl_bot/lib/quiz_questions.json \
+    && grep -q '"category": "litterature"' /ovl_bot/lib/quiz_questions.json \
+    && grep -q '"category": "nature"' /ovl_bot/lib/quiz_questions.json \
+    && grep -q '"category": "sciences"' /ovl_bot/lib/quiz_questions.json \
+    && grep -q '"category": "technologie"' /ovl_bot/lib/quiz_questions.json
 
 ENV NODE_ENV=production
 WORKDIR /ovl_bot
