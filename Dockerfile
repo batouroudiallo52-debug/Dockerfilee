@@ -2,7 +2,7 @@ FROM node:20-bookworm-slim
 
 # Version du bot à déployer. Mettre à jour cette valeur après chaque nouveau
 # push important dans OVL-MD-V2 afin d'invalider le cache Docker de Render.
-ARG OVL_COMMIT=eec0451
+ARG OVL_COMMIT=f60d767
 
 RUN apt-get update && apt-get install -y \
     ffmpeg \
