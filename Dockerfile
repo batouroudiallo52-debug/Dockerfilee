@@ -4,7 +4,7 @@ FROM node:20-bookworm-slim
 # Modifier cette valeur après chaque mise à jour du dépôt source. Comme l'ARG
 # est utilisé dans le RUN ci-dessous, Docker invalide le cache lorsque le
 # commit change et Render reconstruit l'image avec le nouveau code.
-ARG OVL_COMMIT=8d8313a
+ARG OVL_COMMIT=8d8313a3e15be137b1f51a707c682eb08fc5aad4
 ARG OVL_REPO=https://github.com/batouroudiallo52-debug/OVL-MD-V2.git
 
 RUN apt-get update && apt-get install -y \
@@ -12,8 +12,11 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-RUN git clone --depth 1 --branch main --single-branch "$OVL_REPO" /ovl_bot \
-    && test "$(git -C /ovl_bot rev-parse --short HEAD)" = "$OVL_COMMIT" \
+RUN git init /ovl_bot \
+    && git -C /ovl_bot remote add origin "$OVL_REPO" \
+    && git -C /ovl_bot fetch --depth 1 origin "$OVL_COMMIT" \
+    && git -C /ovl_bot checkout --detach FETCH_HEAD \
+    && test "$(git -C /ovl_bot rev-parse HEAD)" = "$OVL_COMMIT" \
     && test -f /ovl_bot/cmd/Quiz.js \
     && test -f /ovl_bot/lib/quiz_questions.json \
     && test -f /ovl_bot/lib/quiz_true_false.json \
