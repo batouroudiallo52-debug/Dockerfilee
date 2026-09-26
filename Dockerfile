@@ -1,21 +1,25 @@
 FROM node:20-bookworm-slim
 
-# Version exacte du bot à déployer.
-# Modifier cette valeur après chaque mise à jour de OVL-MD-V2 : comme elle est
-# utilisée dans la commande RUN ci-dessous, Docker invalide le cache et Render
-# reconstruit l'image avec le nouveau commit.
+# Commit exact du bot à déployer depuis OVL-MD-V2.
+# Modifier cette valeur après chaque mise à jour du dépôt source. Comme l'ARG
+# est utilisé dans le RUN ci-dessous, Docker invalide le cache lorsque le
+# commit change et Render reconstruit l'image avec le nouveau code.
 ARG OVL_COMMIT=c2885f8
+ARG OVL_REPO=https://github.com/batouroudiallo52-debug/OVL-MD-V2.git
 
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-RUN git clone --depth 1 --branch main --single-branch \
-      https://github.com/batouroudiallo52-debug/OVL-MD-V2.git /ovl_bot \
+RUN git clone --depth 1 --branch main --single-branch "$OVL_REPO" /ovl_bot \
     && test "$(git -C /ovl_bot rev-parse --short HEAD)" = "$OVL_COMMIT" \
     && test -f /ovl_bot/cmd/Quiz.js \
     && test -f /ovl_bot/lib/quiz_questions.json \
+    && test -f /ovl_bot/lib/quiz_true_false.json \
+    && grep -q "TRUE_FALSE_FILE" /ovl_bot/cmd/Quiz.js \
+    && grep -q "true-false" /ovl_bot/cmd/Quiz.js \
+    && grep -q "vrai-faux" /ovl_bot/cmd/Quiz.js \
     && grep -q "QUESTION_LIMITS = \[10, 30, 60, 100\]" /ovl_bot/cmd/Quiz.js \
     && grep -q "anime" /ovl_bot/cmd/Quiz.js \
     && grep -q "culture" /ovl_bot/cmd/Quiz.js \
