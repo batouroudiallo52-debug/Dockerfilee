@@ -4,7 +4,7 @@ FROM node:20-bookworm-slim
 # Modifier cette valeur après chaque mise à jour du dépôt source. Comme l'ARG
 # est utilisé dans le RUN ci-dessous, Docker invalide le cache lorsque le
 # commit change et Render reconstruit l'image avec le nouveau code.
-ARG OVL_COMMIT=c2885f8
+ARG OVL_COMMIT=01d3571
 ARG OVL_REPO=https://github.com/batouroudiallo52-debug/OVL-MD-V2.git
 
 RUN apt-get update && apt-get install -y \
