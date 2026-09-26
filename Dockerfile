@@ -24,6 +24,7 @@ RUN git init /ovl_bot \
     && grep -q "true-false" /ovl_bot/cmd/Quiz.js \
     && grep -q "vrai-faux" /ovl_bot/cmd/Quiz.js \
     && grep -q "QUESTION_LIMITS = \[10, 20, 30\]" /ovl_bot/cmd/Quiz.js \
+    && grep -q "QUESTION_SELECTIONS" /ovl_bot/cmd/Quiz.js \
     && grep -q "pendingQuizSelections" /ovl_bot/cmd/Quiz.js \
     && grep -q "function questionKey" /ovl_bot/cmd/Quiz.js \
     && grep -q "questionQueue" /ovl_bot/cmd/Quiz.js \
@@ -31,6 +32,8 @@ RUN git init /ovl_bot \
     && grep -q "total > pool.length" /ovl_bot/cmd/Quiz.js \
     && grep -q "mix: 'Toutes catégories'" /ovl_bot/cmd/Quiz.js \
     && grep -q "ANSWER_TIMEOUT = 10_000" /ovl_bot/cmd/Quiz.js \
+    && grep -q "Temps limite : \\*10 secondes\\*" /ovl_bot/cmd/Quiz.js \
+    && grep -q "Chaque quiz utilise des questions nouvelles" /ovl_bot/cmd/Quiz.js \
     && grep -q "gagne \\*1 point\\*" /ovl_bot/cmd/Quiz.js \
     && grep -q "anime" /ovl_bot/cmd/Quiz.js \
     && grep -q "culture" /ovl_bot/cmd/Quiz.js \
@@ -61,9 +64,11 @@ RUN git init /ovl_bot \
     && grep -q '"category": "litterature"' /ovl_bot/lib/quiz_questions.json \
     && grep -q '"category": "nature"' /ovl_bot/lib/quiz_questions.json \
     && grep -q '"category": "sciences"' /ovl_bot/lib/quiz_questions.json \
-    && grep -q '"category": "technologie"' /ovl_bot/lib/quiz_questions.json
+    && grep -q '"category": "technologie"' /ovl_bot/lib/quiz_questions.json \
+    && node --check /ovl_bot/cmd/Quiz.js \
+    && node -e "JSON.parse(require('fs').readFileSync('/ovl_bot/lib/quiz_questions.json', 'utf8')); JSON.parse(require('fs').readFileSync('/ovl_bot/lib/quiz_true_false.json', 'utf8'));"
 
-ENV NODE_ENV=production
+ENV NODE_ENV=production PORT=8000
 WORKDIR /ovl_bot
 RUN npm install --omit=dev
 
