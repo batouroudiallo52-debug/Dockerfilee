@@ -4,7 +4,7 @@ FROM node:20-bookworm-slim
 # Modifier cette valeur après chaque mise à jour du dépôt source. Comme l'ARG
 # est utilisé dans le RUN ci-dessous, Docker invalide le cache lorsque le
 # commit change et Render reconstruit l'image avec le nouveau code.
-ARG OVL_COMMIT=107884a963484e7491702a6aa29cc7e7b70613fe
+ARG OVL_COMMIT=c8bb0f900b6cb344cffcdc41ce483d1aa7bca3db
 ARG OVL_REPO=https://github.com/batouroudiallo52-debug/OVL-MD-V2.git
 
 RUN apt-get update && apt-get install -y \
@@ -23,7 +23,7 @@ RUN git init /ovl_bot \
     && grep -q "TRUE_FALSE_FILE" /ovl_bot/cmd/Quiz.js \
     && grep -q "true-false" /ovl_bot/cmd/Quiz.js \
     && grep -q "vrai-faux" /ovl_bot/cmd/Quiz.js \
-    && grep -q "QUESTION_LIMITS = \[10, 20, 30, 50, 100\]" /ovl_bot/cmd/Quiz.js \
+    && grep -q "QUESTION_LIMITS = \[10, 20, 30\]" /ovl_bot/cmd/Quiz.js \
     && grep -q "pendingQuizSelections" /ovl_bot/cmd/Quiz.js \
     && grep -q "function questionKey" /ovl_bot/cmd/Quiz.js \
     && grep -q "questionQueue" /ovl_bot/cmd/Quiz.js \
