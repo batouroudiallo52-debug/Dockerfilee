@@ -4,7 +4,7 @@ FROM node:20-bookworm-slim
 # Modifier cette valeur après chaque mise à jour de OVL-MD-V2 : comme elle est
 # utilisée dans la commande RUN ci-dessous, Docker invalide le cache et Render
 # reconstruit l'image avec le nouveau commit.
-ARG OVL_COMMIT=50e22de
+ARG OVL_COMMIT=c2885f8
 
 RUN apt-get update && apt-get install -y \
     ffmpeg \
