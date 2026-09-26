@@ -20,8 +20,12 @@ RUN git clone --depth 1 --branch main --single-branch "$OVL_REPO" /ovl_bot \
     && grep -q "TRUE_FALSE_FILE" /ovl_bot/cmd/Quiz.js \
     && grep -q "true-false" /ovl_bot/cmd/Quiz.js \
     && grep -q "vrai-faux" /ovl_bot/cmd/Quiz.js \
-    && grep -q "QUESTION_LIMITS = \[10, 20, 30\]" /ovl_bot/cmd/Quiz.js \
+    && grep -q "QUESTION_LIMITS = \[10, 20, 30, 50, 100\]" /ovl_bot/cmd/Quiz.js \
     && grep -q "pendingQuizSelections" /ovl_bot/cmd/Quiz.js \
+    && grep -q "questionQueue" /ovl_bot/cmd/Quiz.js \
+    && grep -q "shuffleQuestions" /ovl_bot/cmd/Quiz.js \
+    && grep -q "total > pool.length" /ovl_bot/cmd/Quiz.js \
+    && grep -q "mix: 'Toutes catégories'" /ovl_bot/cmd/Quiz.js \
     && grep -q "ANSWER_TIMEOUT = 10_000" /ovl_bot/cmd/Quiz.js \
     && grep -q "gagne \\*1 point\\*" /ovl_bot/cmd/Quiz.js \
     && grep -q "anime" /ovl_bot/cmd/Quiz.js \
