@@ -4,7 +4,7 @@ FROM node:20-bookworm-slim
 # Modifier cette valeur après chaque mise à jour du dépôt source. Comme l'ARG
 # est utilisé dans le RUN ci-dessous, Docker invalide le cache lorsque le
 # commit change et Render reconstruit l'image avec le nouveau code.
-ARG OVL_COMMIT=33abf5624338d6de5840fd7e9e0cbcf3c1b1c59b
+ARG OVL_COMMIT=4a2d008e15a2fa6050579f6de7778d2056ef97de
 ARG OVL_REPO=https://github.com/batouroudiallo52-debug/OVL-MD-V2.git
 
 RUN apt-get update && apt-get install -y \
@@ -19,10 +19,6 @@ RUN git init /ovl_bot \
     && test "$(git -C /ovl_bot rev-parse HEAD)" = "$OVL_COMMIT" \
     && test -f /ovl_bot/cmd/Quiz.js \
     && test -f /ovl_bot/lib/quiz_questions.json \
-    && test -f /ovl_bot/lib/quiz_true_false.json \
-    && grep -q "TRUE_FALSE_FILE" /ovl_bot/cmd/Quiz.js \
-    && grep -q "true-false" /ovl_bot/cmd/Quiz.js \
-    && grep -q "vrai-faux" /ovl_bot/cmd/Quiz.js \
     && grep -q "QUESTION_LIMITS = \[10, 20, 30\]" /ovl_bot/cmd/Quiz.js \
     && grep -q "QUESTION_SELECTIONS" /ovl_bot/cmd/Quiz.js \
     && grep -q "pendingQuizSelections" /ovl_bot/cmd/Quiz.js \
@@ -40,14 +36,6 @@ RUN git init /ovl_bot \
     && grep -q "foot" /ovl_bot/cmd/Quiz.js \
     && grep -q "horreur" /ovl_bot/cmd/Quiz.js \
     && grep -q "kpop" /ovl_bot/cmd/Quiz.js \
-    && grep -q "musique" /ovl_bot/cmd/Quiz.js \
-    && grep -q "films:" /ovl_bot/cmd/Quiz.js \
-    && grep -q "geographie:" /ovl_bot/cmd/Quiz.js \
-    && grep -q "histoire:" /ovl_bot/cmd/Quiz.js \
-    && grep -q "litterature:" /ovl_bot/cmd/Quiz.js \
-    && grep -q "nature:" /ovl_bot/cmd/Quiz.js \
-    && grep -q "sciences:" /ovl_bot/cmd/Quiz.js \
-    && grep -q "technologie:" /ovl_bot/cmd/Quiz.js \
     && grep -q "CATEGORY_IMAGES" /ovl_bot/cmd/Quiz.js \
     && grep -q "hasImageOption" /ovl_bot/cmd/Quiz.js \
     && grep -q "commons.wikimedia.org/w/api.php" /ovl_bot/cmd/Quiz.js \
@@ -57,16 +45,8 @@ RUN git init /ovl_bot \
     && grep -q '"category": "foot"' /ovl_bot/lib/quiz_questions.json \
     && grep -q '"category": "horreur"' /ovl_bot/lib/quiz_questions.json \
     && grep -q '"category": "kpop"' /ovl_bot/lib/quiz_questions.json \
-    && grep -q '"category": "musique"' /ovl_bot/lib/quiz_questions.json \
-    && grep -q '"category": "films"' /ovl_bot/lib/quiz_questions.json \
-    && grep -q '"category": "geographie"' /ovl_bot/lib/quiz_questions.json \
-    && grep -q '"category": "histoire"' /ovl_bot/lib/quiz_questions.json \
-    && grep -q '"category": "litterature"' /ovl_bot/lib/quiz_questions.json \
-    && grep -q '"category": "nature"' /ovl_bot/lib/quiz_questions.json \
-    && grep -q '"category": "sciences"' /ovl_bot/lib/quiz_questions.json \
-    && grep -q '"category": "technologie"' /ovl_bot/lib/quiz_questions.json \
     && node --check /ovl_bot/cmd/Quiz.js \
-    && node -e "JSON.parse(require('fs').readFileSync('/ovl_bot/lib/quiz_questions.json', 'utf8')); JSON.parse(require('fs').readFileSync('/ovl_bot/lib/quiz_true_false.json', 'utf8'));"
+    && node -e "const q=JSON.parse(require('fs').readFileSync('/ovl_bot/lib/quiz_questions.json', 'utf8')); const allowed=new Set(['anime','culture','foot','horreur','kpop']); if (!q.length || q.some(x => !allowed.has(x.category)) || new Set(q.map(x => x.category)).size !== allowed.size) process.exit(1);"
 
 ENV NODE_ENV=production PORT=8000
 WORKDIR /ovl_bot
