@@ -7,6 +7,12 @@ FROM node:20-bookworm-slim
 ARG OVL_COMMIT=4a2d008e15a2fa6050579f6de7778d2056ef97de
 ARG OVL_REPO=https://github.com/batouroudiallo52-debug/OVL-MD-V2.git
 
+# Ces métadonnées permettent à Render et à l’image finale d’identifier sans
+# ambiguïté la version exacte du bot qui doit être exécutée.
+LABEL org.opencontainers.image.source="$OVL_REPO" \
+      org.opencontainers.image.revision="$OVL_COMMIT" \
+      com.ovl.quiz.categories="anime,culture,foot,horreur,kpop"
+
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     git \
@@ -48,8 +54,10 @@ RUN git init /ovl_bot \
     && node --check /ovl_bot/cmd/Quiz.js \
     && node -e "const q=JSON.parse(require('fs').readFileSync('/ovl_bot/lib/quiz_questions.json', 'utf8')); const allowed=new Set(['anime','culture','foot','horreur','kpop']); if (!q.length || q.some(x => !allowed.has(x.category)) || new Set(q.map(x => x.category)).size !== allowed.size) process.exit(1);"
 
-ENV NODE_ENV=production PORT=8000
+ENV NODE_ENV=production PORT=8000 OVL_SOURCE_COMMIT="$OVL_COMMIT"
 WORKDIR /ovl_bot
+# Cette commande dépend de OVL_COMMIT : chaque changement de commit invalide
+# le cache Render et réinstalle les dépendances de la nouvelle version.
 RUN npm install --omit=dev
 
 EXPOSE 8000
