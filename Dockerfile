@@ -4,7 +4,7 @@ FROM node:20-bookworm-slim
 # Modifier cette valeur après chaque mise à jour du dépôt source. Comme l'ARG
 # est utilisé dans le RUN ci-dessous, Docker invalide le cache lorsque le
 # commit change et Render reconstruit l'image avec le nouveau code.
-ARG OVL_COMMIT=afcc89ea86aa64eeef6c0a669923e53bb5828e2d
+ARG OVL_COMMIT=5198c7873145f8634a9d85663003661b778835fc
 ARG OVL_REPO=https://github.com/batouroudiallo52-debug/OVL-MD-V2.git
 
 # Ces métadonnées permettent à Render et à l’image finale d’identifier sans
@@ -24,9 +24,15 @@ RUN git init /ovl_bot \
     && git -C /ovl_bot checkout --detach FETCH_HEAD \
     && test "$(git -C /ovl_bot rev-parse HEAD)" = "$OVL_COMMIT" \
     && test -f /ovl_bot/cmd/Quiz.js \
+    && test -f /ovl_bot/cmd/Pendu.js \
     && test -f /ovl_bot/lib/quiz_questions.json \
     && grep -q "QUESTION_LIMITS = \[10, 20, 30\]" /ovl_bot/cmd/Quiz.js \
     && grep -q "QUESTION_SELECTIONS" /ovl_bot/cmd/Quiz.js \
+    && grep -q "const DIGIT_EMOJIS" /ovl_bot/cmd/Quiz.js \
+    && grep -q "function parseDigitChoice" /ovl_bot/cmd/Quiz.js \
+    && grep -q "function historyKey(chatId)" /ovl_bot/cmd/Quiz.js \
+    && grep -q "questions inédites dans cette conversation" /ovl_bot/cmd/Quiz.js \
+    && grep -q "nom_cmd: 'pendu'" /ovl_bot/cmd/Pendu.js \
     && grep -q "pendingQuizSelections" /ovl_bot/cmd/Quiz.js \
     && grep -q "function questionKey" /ovl_bot/cmd/Quiz.js \
     && grep -q "questionQueue" /ovl_bot/cmd/Quiz.js \
@@ -35,8 +41,7 @@ RUN git init /ovl_bot \
     && grep -q "mix: 'Toutes catégories'" /ovl_bot/cmd/Quiz.js \
     && grep -q "ANSWER_TIMEOUT = 15_000" /ovl_bot/cmd/Quiz.js \
     && grep -q "Temps limite : \\*15 secondes\\*" /ovl_bot/cmd/Quiz.js \
-    && grep -q "Chaque quiz utilise des questions nouvelles" /ovl_bot/cmd/Quiz.js \
-    && grep -q "gagne \\*1 point\\*" /ovl_bot/cmd/Quiz.js \
+    && grep -q "gagne \*1 point\*" /ovl_bot/cmd/Quiz.js \
     && grep -q "anime" /ovl_bot/cmd/Quiz.js \
     && grep -q "culture" /ovl_bot/cmd/Quiz.js \
     && grep -q "foot" /ovl_bot/cmd/Quiz.js \
@@ -46,6 +51,8 @@ RUN git init /ovl_bot \
     && grep -q "hasImageOption" /ovl_bot/cmd/Quiz.js \
     && grep -q "commons.wikimedia.org/w/api.php" /ovl_bot/cmd/Quiz.js \
     && grep -q "imageSearchQuery" /ovl_bot/cmd/Quiz.js \
+    && node --check /ovl_bot/cmd/Quiz.js \
+    && node --check /ovl_bot/cmd/Pendu.js \
     && grep -q '"category": "anime"' /ovl_bot/lib/quiz_questions.json \
     && grep -q '"category": "culture"' /ovl_bot/lib/quiz_questions.json \
     && grep -q '"category": "foot"' /ovl_bot/lib/quiz_questions.json \
